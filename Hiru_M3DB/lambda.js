@@ -1,4 +1,5 @@
 let AWS = require('aws-sdk');
+const s3 = new AWS.S3();
 let SL = require('@slappforge/slappforge-sdk');
 const sqs = new SL.AWS.SQS(AWS);
 const ddb = new AWS.DynamoDB.DocumentClient();
@@ -12,6 +13,24 @@ exports.handler = function (event, context, callback) {
 		} else {
 			//your logic goes here
 		}
+		s3.putObject({
+			"Body": "ada",
+			"Bucket": "hiru.new",
+			"Key": "sdaa"
+		})
+			.promise()
+			.then(data => {
+				console.log(data);           // successful response
+				/*
+				data = {
+					ETag: "\\"6805f2cfc46c0f04559748bb039d69ae\\"", 
+					VersionId: "pSKidl4pHBiNwukdbcPXAIs.sshFFOc0"
+				}
+				*/
+			})
+			.catch(err => {
+				console.log(err, err.stack); // an error occurred
+			});
 	});
 
 	sqs.receiveMessage({
@@ -28,6 +47,9 @@ exports.handler = function (event, context, callback) {
 	}, function (error) {
 		// implement error handling logic here
 	});
+
+
+
 
 	callback(null, 'Successfully executed');
 }
